@@ -1,8 +1,13 @@
 /*어플리케이션 호출 */
 /*마치 내가 app을 가지고 있는거 처럼 import를 설정한다.*/
 import app from "./app";
+import dotenv from "dotenv";
+dotenv.config();
+import "./models/Comment";
+import "./models/video";
 
-const PORT = 4000;
+
+const PORT = process.env.PORT || 4000;
 
 const handleListening = () => 
 console.log(`Listening on: http://localhost${PORT}`);
