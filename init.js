@@ -1,10 +1,11 @@
 /*어플리케이션 호출 */
 /*마치 내가 app을 가지고 있는거 처럼 import를 설정한다.*/
+import "./db";
 import app from "./app";
 import dotenv from "dotenv";
 dotenv.config();
 import "./models/Comment";
-import "./models/video";
+import "./models/Video";
 
 
 const PORT = process.env.PORT || 4000;
