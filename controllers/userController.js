@@ -1,4 +1,5 @@
 import routes from "../routes";
+import User from "../models/User";
 
 export const getJoin = (req,res) => {
     res.render("join",{pageTitle:"join"});
@@ -9,7 +10,7 @@ export const postJoin = (req,res) => {
     res.render("join",{pageTitle:"join"});
 };
 */
-export const postJoin = (req,res) =>{
+export const postJoin = async (req,res) =>{
     const {
         body:{name , email , password , password2 }
     } = req;
@@ -17,6 +18,17 @@ export const postJoin = (req,res) =>{
         res.status(400);
         res.render("Join",{pageTitle:"Join"});
     }else{
+        try{
+            const user = await User({
+                name,
+                email
+            });
+            await User.register(user, password);
+        }catch(error){
+            console.log(error);
+        }
+        
+        // create 한 값을 레지스터에 저장합니다. 유저값과 패스워드값을.
         //To Do : Register User
         //To Do : Log user in
         res.redirect(routes.home);
