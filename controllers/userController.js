@@ -1,5 +1,6 @@
 import routes from "../routes";
 import User from "../models/User";
+import passport from "passport";
 
 export const getJoin = (req,res) => {
     res.render("join",{pageTitle:"join"});
@@ -10,7 +11,7 @@ export const postJoin = (req,res) => {
     res.render("join",{pageTitle:"join"});
 };
 */
-export const postJoin = async (req,res) =>{
+export const postJoin = async (req,res,next) =>{
     const {
         body:{name , email , password , password2 }
     } = req;
@@ -24,23 +25,29 @@ export const postJoin = async (req,res) =>{
                 email
             });
             await User.register(user, password);
+            next();
         }catch(error){
             console.log(error);
+            res.redirect(routes.home);
         }
         
         // create 한 값을 레지스터에 저장합니다. 유저값과 패스워드값을.
         //To Do : Register User
         //To Do : Log user in
-        res.redirect(routes.home);
+        
     }
 };
 
 
+
+
 export const getLogin = (req,res) => 
 res.render("login",{pageTitle:"login"});
-export const postLogin = (req,res) => {
- res.redirect(routes.home)
-}
+export const postLogin = passport.authenticate('local',{
+    //authenticate 현재 유저정보를 어디서 찾을지 선택 현재는 로컬로 설정.
+    failureRedirect: routes.login,
+    successRedirect: routes.home
+});
 
 
 export const logout = (req,res) =>{
