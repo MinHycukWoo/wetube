@@ -22,6 +22,11 @@ const EDIT_VIDEO = "/:id/edit";
 const DELETE_VIDEO = "/:id/delete"
 /*express 에서 id만 입력하면 텍스트로 인식하지만 /:id로 입력하면 바뀌는 값이라고 인식한다. */
 
+//Github
+
+const GITHUB = "/auth/github";
+const GITHUB_CALLBACK = "/auth/github/callback";
+
 
 const routes = {
     home: HOME,
@@ -61,7 +66,10 @@ const routes = {
         }else{
             return DELETE_VIDEO;
         }
-    }
+    },
+    gitHub: GITHUB,
+    githubCallback: GITHUB_CALLBACK
+
 };
 
 export default routes; 
