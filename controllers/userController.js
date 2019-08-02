@@ -47,14 +47,15 @@ export const postLogin = passport.authenticate("local", {
 
 export const githubLogin = passport.authenticate("github");
 
-export const githubLoginCallback = async (accessToken, refrshToken , profile, cb) => {
-    //console.log(accessToken, refrshToken , profile, cb);
+export const githubLoginCallback = async (accessToken, refreshToken , profile, cb) => {
+    //console.log(accessToken, refreshToken, , profile, cb);
     console.log('profile');
-    const {_json:{id, avatar_url,name, email}} = profile;
+    const {_json:{id, avatar_url: avatarUrl,name, email}} = profile;
     try {
         const user = await User.findOne({ email });
         if (user) {
             user.githubId = id;
+            user.avatarUrl = avatarUrl;
             user.save();
             return cb(null, user);
         }
@@ -62,7 +63,7 @@ export const githubLoginCallback = async (accessToken, refrshToken , profile, cb
             email,
             name,
             githubId: id,
-            avatarUrl: avatar_url
+            avatarUrl
         });
         return cb(null, newUser);
         
@@ -75,12 +76,42 @@ export const postGithubLogIn = (req, res) => {
     res.redirect(routes.home);
 };
 
+export const facebookLogin = passport.authenticate("facebook");
+
+export const facebookLoginCallback = (
+    accessToken, 
+    refreshToken,
+    profile, 
+    cb
+    ) => {
+        console.log(accessToken, refreshToken, profile, cb);
+};
+
+export const postFacebookLogin = (req, res) => {
+    res.redirect(routes.home);;
+};
+
 export const logout = (req,res) =>{
     req.logout();
     res.redirect(routes.home);
-}
+};
 
-export const users = (req,res) => res.render("users",{pageTitle:"users"});
-export const userDetail = (req,res) => res.render("userdetail",{pageTitle:"userdetail"});
-export const editProfile = (req,res) => res.render("editprofile",{pageTitle:"editprofile"});
-export const changePassword = (req,res) => res.render("changepassword",{pageTitle:"changepassword"});
+export const getMe = (req, res) => {
+    res.render("userdetail",{pageTitle:"User Detail", user: req.user});
+};
+//user: req.user 이때의 유저 값은 현재 로그인된 유저값,
+export const userDetail = async (req,res) => {
+    const {params:{id} } = req;
+    try{
+        const user = await User.findById(id);
+        //params값을 토대로 id값을 찾아 변수 user에 저장.
+        //후에 id 값을 find 하는데 성공햇다면 render
+        res.render("userdetail",{pageTitle:"User Detail",user});
+    }catch(error){
+        res.redirect(routes.home)
+    }
+};
+export const editProfile = (req,res) => 
+res.render("editprofile",{pageTitle:"editprofile"});
+export const changePassword = (req,res) => 
+res.render("changepassword",{pageTitle:"changepassword"});
