@@ -124,7 +124,8 @@ export const getMe = (req, res) => {
 export const userDetail = async (req,res) => {
     const {params:{id} } = req;
     try{
-        const user = await User.findById(id);
+        const user = await User.findById(id).populate("videos");
+        console.log(user);
         //params값을 토대로 id값을 찾아 변수 user에 저장.
         //후에 id 값을 find 하는데 성공햇다면 render
         res.render("userdetail",{pageTitle:"User Detail",user});
