@@ -6,7 +6,6 @@ const UserSchema = new mongoose.Schema({
   avatarUrl: String,
   facebookId: Number,
   githubId: Number,
-
   comments: [
     {
       type: mongoose.Schema.Types.ObjectId,
